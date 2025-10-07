@@ -1,0 +1,57 @@
+com.example.pethealth.app-pngs-0 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\build\generated\res\pngs\debug
+com.example.pethealth.app-resValues-1 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\build\generated\res\resValues\debug
+com.example.pethealth.app-updated_navigation_xml-2 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\build\generated\updated_navigation_xml\debug
+com.example.pethealth.app-packageDebugResources-3 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.pethealth.app-packageDebugResources-4 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.pethealth.app-debug-5 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.pethealth.app-debug-6 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\src\debug\res
+com.example.pethealth.app-main-7 A:\JCU\TR 3\3406\PetHealthApp_Skeleton_v2\app\src\main\res
+com.example.pethealth.app-jetified-runtime-release-8 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\0166d641dfd443971ac57c463a917f1b\transformed\jetified-runtime-release\res
+com.example.pethealth.app-jetified-material3-release-9 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\0e2ca5dd449663821fe5e7ab80e42834\transformed\jetified-material3-release\res
+com.example.pethealth.app-navigation-runtime-2.8.0-10 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\1ac764451543a1227a2d1e121052611e\transformed\navigation-runtime-2.8.0\res
+com.example.pethealth.app-jetified-ui-test-manifest-1.7.0-11 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\1ba9fcd578e28fb9aa4c170f3f97a82a\transformed\jetified-ui-test-manifest-1.7.0\res
+com.example.pethealth.app-jetified-profileinstaller-1.3.1-12 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\2038df6be979cc1531ba38ea49040ae8\transformed\jetified-profileinstaller-1.3.1\res
+com.example.pethealth.app-jetified-animation-release-13 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\20f33c3ca0c6ad0682ae205aba054324\transformed\jetified-animation-release\res
+com.example.pethealth.app-jetified-annotation-experimental-1.4.1-14 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\255aa462cb82db0c7adfa24443840fb8\transformed\jetified-annotation-experimental-1.4.1\res
+com.example.pethealth.app-jetified-ui-release-15 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\2d063a99599fe6b7f8e1290871ca3526\transformed\jetified-ui-release\res
+com.example.pethealth.app-jetified-lifecycle-viewmodel-release-16 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\3a47e1e7ce8bb42d20437976bb8b9102\transformed\jetified-lifecycle-viewmodel-release\res
+com.example.pethealth.app-jetified-navigation-compose-2.8.0-17 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\3c14059f3b7b8f4b7907fe2d0783e4dc\transformed\jetified-navigation-compose-2.8.0\res
+com.example.pethealth.app-jetified-lifecycle-runtime-ktx-release-18 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\46d9238673af9ed57cc1c9e608dcc11d\transformed\jetified-lifecycle-runtime-ktx-release\res
+com.example.pethealth.app-jetified-lifecycle-runtime-compose-release-19 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\4db97a1fa748f4b352568e65ef7ccfa1\transformed\jetified-lifecycle-runtime-compose-release\res
+com.example.pethealth.app-jetified-emoji2-1.3.0-20 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\51026b0731953dcd665b7f358018d37c\transformed\jetified-emoji2-1.3.0\res
+com.example.pethealth.app-jetified-activity-1.9.2-21 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\5ae56edd713e3a1bf899a9f2a045c186\transformed\jetified-activity-1.9.2\res
+com.example.pethealth.app-core-runtime-2.2.0-22 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\5df2f6a38c81c48ee4935fdb79636cde\transformed\core-runtime-2.2.0\res
+com.example.pethealth.app-jetified-lifecycle-runtime-release-23 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\76403fb4799bee7e9c8e5396f5bace3a\transformed\jetified-lifecycle-runtime-release\res
+com.example.pethealth.app-jetified-runtime-saveable-release-24 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\7bfe648663ca7c3363bbe85c64273c58\transformed\jetified-runtime-saveable-release\res
+com.example.pethealth.app-jetified-ui-graphics-release-25 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\7eee6cf46e69a773da0ba43bd21a54cb\transformed\jetified-ui-graphics-release\res
+com.example.pethealth.app-core-1.13.1-26 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\8311dabe6fb13f02ba9b7cd84b264754\transformed\core-1.13.1\res
+com.example.pethealth.app-jetified-ui-tooling-data-release-27 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\8475ebcb0ff1179401718a8d13265b05\transformed\jetified-ui-tooling-data-release\res
+com.example.pethealth.app-jetified-lifecycle-process-2.8.3-28 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\92ed9b67af5d9cd1cb14d834ec81a157\transformed\jetified-lifecycle-process-2.8.3\res
+com.example.pethealth.app-jetified-ui-util-release-29 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\98aa6f40af6829f4a50f39843ccd1415\transformed\jetified-ui-util-release\res
+com.example.pethealth.app-jetified-lifecycle-viewmodel-compose-release-30 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\999285adf37ecb1d7790847cbe826791\transformed\jetified-lifecycle-viewmodel-compose-release\res
+com.example.pethealth.app-jetified-customview-poolingcontainer-1.0.0-31 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\9dcb2d06c7ad0359fc2fad97cbbcd5af\transformed\jetified-customview-poolingcontainer-1.0.0\res
+com.example.pethealth.app-jetified-graphics-path-1.0.1-32 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\a5592053afef0f95f8738a7315c553e9\transformed\jetified-graphics-path-1.0.1\res
+com.example.pethealth.app-jetified-savedstate-ktx-1.2.1-33 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\a71a4462c11d3881be6ef22219cff2cc\transformed\jetified-savedstate-ktx-1.2.1\res
+com.example.pethealth.app-jetified-ui-text-release-34 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\a9aec8298e1ae5b914f7e0cdc842026e\transformed\jetified-ui-text-release\res
+com.example.pethealth.app-jetified-ui-tooling-release-35 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\aebfd5615b9a61479ea39e80cc6b13ef\transformed\jetified-ui-tooling-release\res
+com.example.pethealth.app-jetified-activity-compose-1.9.2-36 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\b53e2e37c2dc363b4aa7ead2f508b156\transformed\jetified-activity-compose-1.9.2\res
+com.example.pethealth.app-jetified-material-release-37 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\bf1f39dd41abf57f32eeb848140a2a9f\transformed\jetified-material-release\res
+com.example.pethealth.app-jetified-material-icons-core-release-38 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\bfcaf4ff56384e404e7936372eb8dddf\transformed\jetified-material-icons-core-release\res
+com.example.pethealth.app-jetified-lifecycle-viewmodel-savedstate-2.8.3-39 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\c564f9acdf36c9609b1f1256a9b6bfe7\transformed\jetified-lifecycle-viewmodel-savedstate-2.8.3\res
+com.example.pethealth.app-jetified-savedstate-1.2.1-40 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\c70593c1158e054ec784c7f6992f870b\transformed\jetified-savedstate-1.2.1\res
+com.example.pethealth.app-jetified-ui-geometry-release-41 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\c74c6acc60fd72b6670ab84ee1e138ce\transformed\jetified-ui-geometry-release\res
+com.example.pethealth.app-jetified-activity-ktx-1.9.2-42 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\cae4ad0034eeee0089a37c8b0d386d6b\transformed\jetified-activity-ktx-1.9.2\res
+com.example.pethealth.app-navigation-runtime-ktx-2.8.0-43 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\ccec5f93fde62b7bad8a1fbd5f6baff7\transformed\navigation-runtime-ktx-2.8.0\res
+com.example.pethealth.app-jetified-foundation-layout-release-44 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\cea3306c15e0f163941e1ae83b445a8c\transformed\jetified-foundation-layout-release\res
+com.example.pethealth.app-jetified-ui-tooling-preview-release-45 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\d2ae022ff0d0bd4159efa52c93d24ef7\transformed\jetified-ui-tooling-preview-release\res
+com.example.pethealth.app-jetified-material-ripple-release-46 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\d342889470d5aa2ea63c92aaa3363f7d\transformed\jetified-material-ripple-release\res
+com.example.pethealth.app-navigation-common-ktx-2.8.0-47 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\d5d364d32c7635d6c9df14c3ff4e27d1\transformed\navigation-common-ktx-2.8.0\res
+com.example.pethealth.app-navigation-common-2.8.0-48 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\def0acb79d64547f8487903dc0c4587c\transformed\navigation-common-2.8.0\res
+com.example.pethealth.app-jetified-foundation-release-49 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\e0f52785c76cc60514e596d5bced4733\transformed\jetified-foundation-release\res
+com.example.pethealth.app-jetified-core-ktx-1.13.1-50 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\e5aa5edb70f51015e3a177b80f721211\transformed\jetified-core-ktx-1.13.1\res
+com.example.pethealth.app-jetified-material-icons-extended-release-51 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\e7dd0d3b9fb5ab4f396e5aec6bd81c1c\transformed\jetified-material-icons-extended-release\res
+com.example.pethealth.app-lifecycle-livedata-core-2.8.3-52 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\e8547e2d2a31c4c0e6611391f193b816\transformed\lifecycle-livedata-core-2.8.3\res
+com.example.pethealth.app-jetified-animation-core-release-53 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\ea768dc21c3d7df97412159098cb5b86\transformed\jetified-animation-core-release\res
+com.example.pethealth.app-jetified-lifecycle-viewmodel-ktx-2.8.3-54 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\f007521bc59760a828b2236bbb3e1bfd\transformed\jetified-lifecycle-viewmodel-ktx-2.8.3\res
+com.example.pethealth.app-jetified-startup-runtime-1.1.1-55 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\f7baa0f2d43c5d417606b9bf6387bcbd\transformed\jetified-startup-runtime-1.1.1\res
+com.example.pethealth.app-jetified-ui-unit-release-56 C:\Users\10164\.gradle\caches\9.0-milestone-1\transforms\ff7ef53ff3ff989e11ef6ce71a29c58a\transformed\jetified-ui-unit-release\res
