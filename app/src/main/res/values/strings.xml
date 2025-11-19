@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pet Health Tracker</string>
+    <string name="health">Health</string>
+    <string name="diet">Diet</string>
+    <string name="exercise">Exercise</string>
+    <string name="reminders">Reminders</string>
+    <string name="add_pet">Add Pet</string>
+    <string name="pet_name">Pet Name</string>
+    <string name="pet_type">Pet Type</string>
+    <string name="pet_breed">Breed</string>
+    <string name="pet_age">Age</string>
+    <string name="pet_weight">Weight (kg)</string>
+    <string name="pet_id">Pet ID</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="no_pets">No pets added yet. Add your first pet!</string>
+    <string name="vaccination">Vaccination</string>
+    <string name="checkup">Check-up</string>
+    <string name="medication">Medication</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="reminder_title">Title</string>
+    <string name="reminder_date">Date</string>
+    <string name="reminder_type">Reminder Type</string>
+    <string name="once">Once</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
+    <string name="energy_burned">Energy Burned (kcal)</string>
+    <string name="food_type">Food Type</string>
+    <string name="food_amount">Amount (g)</string>
+    <string name="activity_type">Activity Type</string>
+    <string name="duration">Duration (min)</string>
+    <string name="notes">Notes</string>
+    <string name="back">Back</string>
+</resources>

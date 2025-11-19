@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.pethealthtracker.app-mergeDebugResources-58:/values-v23/values-v23.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\10164\\.gradle\\caches\\transforms-4\\0cbbc2cdcbd0b6d5937e01e53ce0e2b0\\transformed\\work-runtime-2.8.1\\res\\values-v23\\values-v23.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,121",
+                        "endColumns": "65,62",
+                        "endOffsets": "116,179"
+                    }
+                }
+            ]
+        }
+    ]
+}
