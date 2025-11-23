@@ -30,10 +30,10 @@ class MainActivity : ComponentActivity() {
     ) { isGranted ->
         if (isGranted) {
             Log.d("MainActivity", "SCHEDULE_EXACT_ALARM permission granted")
-            android.widget.Toast.makeText(this, "日程提醒权限已授予", android.widget.Toast.LENGTH_SHORT).show()
+//            android.widget.Toast.makeText(this, "日程提醒权限已授予", android.widget.Toast.LENGTH_SHORT).show()
         } else {
             Log.w("MainActivity", "SCHEDULE_EXACT_ALARM permission denied")
-            android.widget.Toast.makeText(this, "日程提醒权限被拒绝，闹钟可能无法工作", android.widget.Toast.LENGTH_LONG).show()
+//            android.widget.Toast.makeText(this, "日程提醒权限被拒绝，闹钟可能无法工作", android.widget.Toast.LENGTH_LONG).show()
         }
     }
 
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("MainActivity", "SCHEDULE_EXACT_ALARM permission already granted")
-                android.widget.Toast.makeText(this, "日程提醒权限已授予", android.widget.Toast.LENGTH_SHORT).show()
+//                android.widget.Toast.makeText(this, "日程提醒权限已授予", android.widget.Toast.LENGTH_SHORT).show()
             }
         } else {
             Log.d("MainActivity", "Device is below Android 12 (API level $apiLevel), permission not needed")

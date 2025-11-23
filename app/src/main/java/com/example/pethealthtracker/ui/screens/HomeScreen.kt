@@ -144,7 +144,7 @@ fun PetCard(pet: Pet) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "${pet.type} - ${pet.breed}",
+                text = pet.type,
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(

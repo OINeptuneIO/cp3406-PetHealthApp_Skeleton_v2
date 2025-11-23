@@ -44,6 +44,8 @@ public final class ReminderDao_Impl implements ReminderDao {
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteByPetId;
 
+  private final SharedSQLiteStatement __preparedStmtOfDeleteById;
+
   public ReminderDao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfReminder = new EntityInsertionAdapter<Reminder>(__db) {
@@ -178,6 +180,14 @@ public final class ReminderDao_Impl implements ReminderDao {
         return _query;
       }
     };
+    this.__preparedStmtOfDeleteById = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "DELETE FROM reminders WHERE id = ?";
+        return _query;
+      }
+    };
   }
 
   @Override
@@ -291,6 +301,35 @@ public final class ReminderDao_Impl implements ReminderDao {
           }
         } finally {
           __preparedStmtOfDeleteByPetId.release(_stmt);
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
+  public Object deleteById(final String id, final Continuation<? super Unit> $completion) {
+    return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
+      @Override
+      @NonNull
+      public Unit call() throws Exception {
+        final SupportSQLiteStatement _stmt = __preparedStmtOfDeleteById.acquire();
+        int _argIndex = 1;
+        if (id == null) {
+          _stmt.bindNull(_argIndex);
+        } else {
+          _stmt.bindString(_argIndex, id);
+        }
+        try {
+          __db.beginTransaction();
+          try {
+            _stmt.executeUpdateDelete();
+            __db.setTransactionSuccessful();
+            return Unit.INSTANCE;
+          } finally {
+            __db.endTransaction();
+          }
+        } finally {
+          __preparedStmtOfDeleteById.release(_stmt);
         }
       }
     }, $completion);

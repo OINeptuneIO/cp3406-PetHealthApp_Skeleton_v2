@@ -25,4 +25,7 @@ class ReminderRepository(private val reminderDao: ReminderDao) {
 
     suspend fun deleteByPetId(petId: String) =
         reminderDao.deleteByPetId(petId)
+
+    suspend fun deleteReminderById(id: String) =
+        reminderDao.deleteById(id)
 }

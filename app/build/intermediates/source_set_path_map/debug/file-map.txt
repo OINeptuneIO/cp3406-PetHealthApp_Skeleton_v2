@@ -54,9 +54,9 @@ com.example.pethealthtracker.app-lifecycle-livedata-core-2.6.2-52 C:\Users\10164
 com.example.pethealthtracker.app-core-1.10.1-53 C:\Users\10164\.gradle\caches\transforms-4\d999eb30b8b767ddc554111e921a8ce7\transformed\core-1.10.1\res
 com.example.pethealthtracker.app-jetified-ui-text-release-54 C:\Users\10164\.gradle\caches\transforms-4\ed3cff04b4d8a6e197f08ef069a8956c\transformed\jetified-ui-text-release\res
 com.example.pethealthtracker.app-jetified-activity-ktx-1.7.2-55 C:\Users\10164\.gradle\caches\transforms-4\f64baf32115298c60ac4b0f299667437\transformed\jetified-activity-ktx-1.7.2\res
-com.example.pethealthtracker.app-resValues-56 D:\JCU\TR 3\4889091746586721643jiu\app\build\generated\res\resValues\debug
-com.example.pethealthtracker.app-packageDebugResources-57 D:\JCU\TR 3\4889091746586721643jiu\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.example.pethealthtracker.app-packageDebugResources-58 D:\JCU\TR 3\4889091746586721643jiu\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.example.pethealthtracker.app-merged_res-59 D:\JCU\TR 3\4889091746586721643jiu\app\build\intermediates\merged_res\debug
-com.example.pethealthtracker.app-debug-60 D:\JCU\TR 3\4889091746586721643jiu\app\src\debug\res
-com.example.pethealthtracker.app-main-61 D:\JCU\TR 3\4889091746586721643jiu\app\src\main\res
+com.example.pethealthtracker.app-resValues-56 D:\JCU\TR 3\4889091746586721643\app\build\generated\res\resValues\debug
+com.example.pethealthtracker.app-packageDebugResources-57 D:\JCU\TR 3\4889091746586721643\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.pethealthtracker.app-packageDebugResources-58 D:\JCU\TR 3\4889091746586721643\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.pethealthtracker.app-merged_res-59 D:\JCU\TR 3\4889091746586721643\app\build\intermediates\merged_res\debug
+com.example.pethealthtracker.app-debug-60 D:\JCU\TR 3\4889091746586721643\app\src\debug\res
+com.example.pethealthtracker.app-main-61 D:\JCU\TR 3\4889091746586721643\app\src\main\res
