@@ -1,10 +1,16 @@
-# Pet Health & Wellness Tracker (Skeleton) — v2
+# Pet Health Tracker App
 
-Updated skeleton for **CP3406 Assignment 1 (Part B)**.
+A simple and modern Android application designed to help users manage and track their pets’ health.  
+This project was developed for **CP3406 – Mobile App Development (Assignment 2)**.
 
-Changes:
-- Added `gradle.properties` with AndroidX flags
-- Set Manifest icon to system default to avoid missing `ic_launcher`
-- Added `material-icons-extended`
+---
 
-Run: open in Android Studio → finish Gradle sync → select emulator/phone → **Run ▶**.
+## 📱 Features
+
+- Add, edit, and delete pets
+- Track health records (e.g., vaccinations, symptoms, weight changes)
+- Store data using **Room** local database
+- Modern UI built with **Jetpack Compose**
+- Navigation using **Navigation Compose**
+- ViewModel + Repository architecture
+- Optional: Network API integration (e.g., health tips or external data)
