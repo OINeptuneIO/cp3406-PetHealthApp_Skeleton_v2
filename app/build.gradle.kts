@@ -55,6 +55,12 @@ android {
     }
 }
 
+kapt {
+    javacOptions {
+        option("-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED")
+    }
+}
+
 dependencies {
     // Core Android
     implementation("androidx.core:core-ktx:1.10.1")

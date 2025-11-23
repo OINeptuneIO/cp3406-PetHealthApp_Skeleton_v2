@@ -4,7 +4,7 @@
             "outputFile": "com.example.pethealthtracker.app-mergeDebugResources-58:/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\10164\\.gradle\\caches\\transforms-4\\0cbbc2cdcbd0b6d5937e01e53ce0e2b0\\transformed\\work-runtime-2.8.1\\res\\values-v23\\values-v23.xml",
+                    "source": "C:\\Users\\10164\\.gradle\\caches\\transforms-3\\7b03ac806f06bc5b5ba6f4e340f74b4d\\transformed\\work-runtime-2.8.1\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

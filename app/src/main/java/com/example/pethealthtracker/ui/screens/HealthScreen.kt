@@ -1,6 +1,7 @@
 package com.example.pethealthtracker.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -18,6 +19,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pethealthtracker.data.AppDatabase
@@ -174,10 +178,14 @@ fun HealthScreen(navController: NavController) {
                         items(healthRecords.size) { index ->
                             val record = healthRecords[index]
                             HealthRecordCard(
-                                weight = record.weight,
-                                energyExpenditure = record.energyExpenditure,
-                                date = formatDateTime(record.recordDate),
-                                notes = record.notes
+                                record = record,
+                                healthViewModel = healthViewModel,
+                                onRecordUpdated = { updatedRecord ->
+                                    healthViewModel.updateRecord(updatedRecord)
+                                },
+                                onRecordDeleted = { deletedRecord ->
+                                    healthViewModel.deleteRecord(deletedRecord)
+                                }
                             )
                         }
                     }
@@ -223,15 +231,26 @@ private fun parseDateTime(date: String, time: String): Long {
 
 @Composable
 fun HealthRecordCard(
-    weight: Double,
-    energyExpenditure: Double,
-    date: String,
-    notes: String
+    record: HealthRecord,
+    healthViewModel: HealthViewModel,
+    onRecordUpdated: (HealthRecord) -> Unit,
+    onRecordDeleted: (HealthRecord) -> Unit
 ) {
+    var showContextMenu by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        showContextMenu = true
+                    }
+                )
+            },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
@@ -252,7 +271,7 @@ fun HealthRecordCard(
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = "$weight kg",
+                        text = "${record.weight} kg",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
@@ -262,15 +281,63 @@ fun HealthRecordCard(
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = "$energyExpenditure kcal",
+                        text = "${record.energyExpenditure} kcal",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = date, style = MaterialTheme.typography.bodySmall)
-            Text(text = notes, style = MaterialTheme.typography.bodySmall)
+            Text(text = formatDateTime(record.recordDate), style = MaterialTheme.typography.bodySmall)
+            Text(text = record.notes, style = MaterialTheme.typography.bodySmall)
         }
+
+        DropdownMenu(
+            expanded = showContextMenu,
+            onDismissRequest = { showContextMenu = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Edit") },
+                onClick = {
+                    showContextMenu = false
+                    showEditDialog = true
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Delete") },
+                onClick = {
+                    showContextMenu = false
+                    showDeleteConfirm = true
+                }
+            )
+        }
+    }
+
+    if (showEditDialog) {
+        EditHealthRecordDialog(
+            record = record,
+            onDismiss = { showEditDialog = false },
+            onConfirm = { weight, energy, notes, date, time ->
+                val recordDate = parseDateTime(date, time)
+                val updatedRecord = record.copy(
+                    weight = weight.toDoubleOrNull() ?: 0.0,
+                    energyExpenditure = energy.toDoubleOrNull() ?: 0.0,
+                    notes = notes,
+                    recordDate = recordDate
+                )
+                onRecordUpdated(updatedRecord)
+                showEditDialog = false
+            }
+        )
+    }
+
+    if (showDeleteConfirm) {
+        DeleteHealthConfirmDialog(
+            onConfirm = {
+                onRecordDeleted(record)
+                showDeleteConfirm = false
+            },
+            onDismiss = { showDeleteConfirm = false }
+        )
     }
 }
 
@@ -382,6 +449,149 @@ fun AddHealthRecordDialog(
                 onClick = { onConfirm(weight, energy, notes, date, time) }
             ) {
                 Text("Add")
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditHealthRecordDialog(
+    record: HealthRecord,
+    onDismiss: () -> Unit,
+    onConfirm: (weight: String, energy: String, notes: String, date: String, time: String) -> Unit
+) {
+    var weight by remember { mutableStateOf(record.weight.toString()) }
+    var energy by remember { mutableStateOf(record.energyExpenditure.toString()) }
+    var notes by remember { mutableStateOf(record.notes) }
+
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val sdfTime = SimpleDateFormat("HH:mm", Locale.getDefault())
+    var date by remember { mutableStateOf(sdf.format(Date(record.recordDate))) }
+    var time by remember { mutableStateOf(sdfTime.format(Date(record.recordDate))) }
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            val sdfFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            date = sdfFormat.format(Date(it))
+                        }
+                        showDatePicker = false
+                    }
+                ) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit Health Record") },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                androidx.compose.material3.TextField(
+                    value = weight,
+                    onValueChange = { weight = it },
+                    label = { Text("Weight (kg)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                androidx.compose.material3.TextField(
+                    value = energy,
+                    onValueChange = { energy = it },
+                    label = { Text("Energy Expenditure (kcal)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                androidx.compose.material3.TextField(
+                    value = notes,
+                    onValueChange = { notes = it },
+                    label = { Text("Notes") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                // Date Picker Button
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDatePicker = true },
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                text = "Date",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                            Text(
+                                text = date,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+                androidx.compose.material3.TextField(
+                    value = time,
+                    onValueChange = { time = it },
+                    label = { Text("Time (HH:mm)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(
+                onClick = { onConfirm(weight, energy, notes, date, time) }
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun DeleteHealthConfirmDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Delete Health Record") },
+        text = { Text("Are you sure you want to delete this health record? This action cannot be undone.") },
+        confirmButton = {
+            androidx.compose.material3.TextButton(
+                onClick = onConfirm
+            ) {
+                Text("Delete")
             }
         },
         dismissButton = {

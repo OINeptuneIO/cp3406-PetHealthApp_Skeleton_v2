@@ -1,6 +1,7 @@
 package com.example.pethealthtracker.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -18,6 +19,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pethealthtracker.data.AppDatabase
@@ -174,10 +178,14 @@ fun DietScreen(navController: NavController) {
                         items(dietRecords.size) { index ->
                             val record = dietRecords[index]
                             DietRecordCard(
-                                foodType = record.foodType,
-                                amount = record.amount,
-                                calories = record.calories,
-                                date = formatDateTime(record.recordDate)
+                                record = record,
+                                dietViewModel = dietViewModel,
+                                onRecordUpdated = { updatedRecord ->
+                                    dietViewModel.updateRecord(updatedRecord)
+                                },
+                                onRecordDeleted = { deletedRecord ->
+                                    dietViewModel.deleteRecord(deletedRecord)
+                                }
                             )
                         }
                     }
@@ -223,15 +231,26 @@ private fun parseDateTime(date: String, time: String): Long {
 
 @Composable
 fun DietRecordCard(
-    foodType: String,
-    amount: Double,
-    calories: Double,
-    date: String
+    record: DietRecord,
+    dietViewModel: DietViewModel,
+    onRecordUpdated: (DietRecord) -> Unit,
+    onRecordDeleted: (DietRecord) -> Unit
 ) {
+    var showContextMenu by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        showContextMenu = true
+                    }
+                )
+            },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
@@ -248,24 +267,72 @@ fun DietRecordCard(
             ) {
                 Column {
                     Text(
-                        text = foodType,
+                        text = record.foodType,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "$amount g",
+                        text = "${record.amount} g",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "$calories kcal",
+                        text = "${record.calories} kcal",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = date, style = MaterialTheme.typography.bodySmall)
+            Text(text = formatDateTime(record.recordDate), style = MaterialTheme.typography.bodySmall)
         }
+
+        DropdownMenu(
+            expanded = showContextMenu,
+            onDismissRequest = { showContextMenu = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Edit") },
+                onClick = {
+                    showContextMenu = false
+                    showEditDialog = true
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Delete") },
+                onClick = {
+                    showContextMenu = false
+                    showDeleteConfirm = true
+                }
+            )
+        }
+    }
+
+    if (showEditDialog) {
+        EditDietRecordDialog(
+            record = record,
+            onDismiss = { showEditDialog = false },
+            onConfirm = { foodType, amount, calories, date, time ->
+                val recordDate = parseDateTime(date, time)
+                val updatedRecord = record.copy(
+                    foodType = foodType,
+                    amount = amount.toDoubleOrNull() ?: 0.0,
+                    calories = calories.toDoubleOrNull() ?: 0.0,
+                    recordDate = recordDate
+                )
+                onRecordUpdated(updatedRecord)
+                showEditDialog = false
+            }
+        )
+    }
+
+    if (showDeleteConfirm) {
+        DeleteDietConfirmDialog(
+            onConfirm = {
+                onRecordDeleted(record)
+                showDeleteConfirm = false
+            },
+            onDismiss = { showDeleteConfirm = false }
+        )
     }
 }
 
@@ -401,6 +468,173 @@ fun AddDietRecordDialog(
                 onClick = { onConfirm(foodType, amount, calories, date, time) }
             ) {
                 Text("Add")
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun EditDietRecordDialog(
+    record: DietRecord,
+    onDismiss: () -> Unit,
+    onConfirm: (foodType: String, amount: String, calories: String, date: String, time: String) -> Unit
+) {
+    val foodTypes = listOf(
+        "Dry Food",
+        "Wet Food",
+        "Fresh Food",
+        "Treats",
+        "Vegetables",
+        "Meat",
+        "Fish",
+        "Chicken",
+        "Rice",
+        "Eggs"
+    )
+
+    var foodType by remember { mutableStateOf(record.foodType) }
+    var amount by remember { mutableStateOf(record.amount.toString()) }
+    var calories by remember { mutableStateOf(record.calories.toString()) }
+
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val sdfTime = SimpleDateFormat("HH:mm", Locale.getDefault())
+    var date by remember { mutableStateOf(sdf.format(Date(record.recordDate))) }
+    var time by remember { mutableStateOf(sdfTime.format(Date(record.recordDate))) }
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            val sdfFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            date = sdfFormat.format(Date(it))
+                        }
+                        showDatePicker = false
+                    }
+                ) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit Diet Record") },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Select Food Type:",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    foodTypes.forEach { type ->
+                        androidx.compose.material3.FilterChip(
+                            selected = foodType == type,
+                            onClick = { foodType = type },
+                            label = { Text(type) }
+                        )
+                    }
+                }
+                androidx.compose.material3.TextField(
+                    value = amount,
+                    onValueChange = { amount = it },
+                    label = { Text("Amount (g)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                androidx.compose.material3.TextField(
+                    value = calories,
+                    onValueChange = { calories = it },
+                    label = { Text("Calories (kcal)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                // Date Picker Button
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDatePicker = true },
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                text = "Date",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                            Text(
+                                text = date,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+                androidx.compose.material3.TextField(
+                    value = time,
+                    onValueChange = { time = it },
+                    label = { Text("Time (HH:mm)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(
+                onClick = { onConfirm(foodType, amount, calories, date, time) }
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun DeleteDietConfirmDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Delete Diet Record") },
+        text = { Text("Are you sure you want to delete this diet record? This action cannot be undone.") },
+        confirmButton = {
+            androidx.compose.material3.TextButton(
+                onClick = onConfirm
+            ) {
+                Text("Delete")
             }
         },
         dismissButton = {

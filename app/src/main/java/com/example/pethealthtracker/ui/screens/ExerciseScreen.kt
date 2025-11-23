@@ -1,6 +1,7 @@
 package com.example.pethealthtracker.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -36,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pethealthtracker.data.AppDatabase
@@ -175,10 +179,14 @@ fun ExerciseScreen(navController: NavController) {
                         items(exerciseRecords.size) { index ->
                             val record = exerciseRecords[index]
                             ExerciseRecordCard(
-                                activityType = record.activityType,
-                                duration = record.duration,
-                                caloriesBurned = record.caloriesBurned,
-                                date = formatDateTime(record.recordDate)
+                                record = record,
+                                exerciseViewModel = exerciseViewModel,
+                                onRecordUpdated = { updatedRecord ->
+                                    exerciseViewModel.updateRecord(updatedRecord)
+                                },
+                                onRecordDeleted = { deletedRecord ->
+                                    exerciseViewModel.deleteRecord(deletedRecord)
+                                }
                             )
                         }
                     }
@@ -224,15 +232,26 @@ private fun parseDateTime(date: String, time: String): Long {
 
 @Composable
 fun ExerciseRecordCard(
-    activityType: String,
-    duration: Int,
-    caloriesBurned: Double,
-    date: String
+    record: ExerciseRecord,
+    exerciseViewModel: ExerciseViewModel,
+    onRecordUpdated: (ExerciseRecord) -> Unit,
+    onRecordDeleted: (ExerciseRecord) -> Unit
 ) {
+    var showContextMenu by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        showContextMenu = true
+                    }
+                )
+            },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
@@ -249,24 +268,72 @@ fun ExerciseRecordCard(
             ) {
                 Column {
                     Text(
-                        text = activityType,
+                        text = record.activityType,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "$duration minutes",
+                        text = "${record.duration} minutes",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "$caloriesBurned kcal",
+                        text = "${record.caloriesBurned} kcal",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = date, style = MaterialTheme.typography.bodySmall)
+            Text(text = formatDateTime(record.recordDate), style = MaterialTheme.typography.bodySmall)
         }
+
+        DropdownMenu(
+            expanded = showContextMenu,
+            onDismissRequest = { showContextMenu = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Edit") },
+                onClick = {
+                    showContextMenu = false
+                    showEditDialog = true
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Delete") },
+                onClick = {
+                    showContextMenu = false
+                    showDeleteConfirm = true
+                }
+            )
+        }
+    }
+
+    if (showEditDialog) {
+        EditExerciseRecordDialog(
+            record = record,
+            onDismiss = { showEditDialog = false },
+            onConfirm = { activityType, duration, calories, date, time ->
+                val recordDate = parseDateTime(date, time)
+                val updatedRecord = record.copy(
+                    activityType = activityType,
+                    duration = duration.toIntOrNull() ?: 0,
+                    caloriesBurned = calories.toDoubleOrNull() ?: 0.0,
+                    recordDate = recordDate
+                )
+                onRecordUpdated(updatedRecord)
+                showEditDialog = false
+            }
+        )
+    }
+
+    if (showDeleteConfirm) {
+        DeleteExerciseConfirmDialog(
+            onConfirm = {
+                onRecordDeleted(record)
+                showDeleteConfirm = false
+            },
+            onDismiss = { showDeleteConfirm = false }
+        )
     }
 }
 
@@ -401,6 +468,172 @@ fun AddExerciseRecordDialog(
                 onClick = { onConfirm(activityType, duration, calories, date, time) }
             ) {
                 Text("Add")
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun EditExerciseRecordDialog(
+    record: ExerciseRecord,
+    onDismiss: () -> Unit,
+    onConfirm: (activityType: String, duration: String, calories: String, date: String, time: String) -> Unit
+) {
+    val activityTypes = listOf(
+        "Running",
+        "Walking",
+        "Swimming",
+        "Cycling",
+        "Gym/Training",
+        "Yoga",
+        "Play",
+        "Fetch",
+        "Agility Training"
+    )
+
+    var activityType by remember { mutableStateOf(record.activityType) }
+    var duration by remember { mutableStateOf(record.duration.toString()) }
+    var calories by remember { mutableStateOf(record.caloriesBurned.toString()) }
+
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val sdfTime = SimpleDateFormat("HH:mm", Locale.getDefault())
+    var date by remember { mutableStateOf(sdf.format(Date(record.recordDate))) }
+    var time by remember { mutableStateOf(sdfTime.format(Date(record.recordDate))) }
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let {
+                            val sdfFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            date = sdfFormat.format(Date(it))
+                        }
+                        showDatePicker = false
+                    }
+                ) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit Exercise Record") },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Select Activity Type:",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    activityTypes.forEach { type ->
+                        androidx.compose.material3.FilterChip(
+                            selected = activityType == type,
+                            onClick = { activityType = type },
+                            label = { Text(type) }
+                        )
+                    }
+                }
+                androidx.compose.material3.TextField(
+                    value = duration,
+                    onValueChange = { duration = it },
+                    label = { Text("Duration (minutes)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                androidx.compose.material3.TextField(
+                    value = calories,
+                    onValueChange = { calories = it },
+                    label = { Text("Calories Burned (kcal)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                // Date Picker Button
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDatePicker = true },
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                text = "Date",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                            Text(
+                                text = date,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                }
+                androidx.compose.material3.TextField(
+                    value = time,
+                    onValueChange = { time = it },
+                    label = { Text("Time (HH:mm)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(
+                onClick = { onConfirm(activityType, duration, calories, date, time) }
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
+
+@Composable
+fun DeleteExerciseConfirmDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Delete Exercise Record") },
+        text = { Text("Are you sure you want to delete this exercise record? This action cannot be undone.") },
+        confirmButton = {
+            androidx.compose.material3.TextButton(
+                onClick = onConfirm
+            ) {
+                Text("Delete")
             }
         },
         dismissButton = {
